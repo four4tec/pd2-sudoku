@@ -2,6 +2,7 @@
 #include<iostream>
 #include<vector>
 #include<algorithm>
+#include<cstring>
 using namespace std;
 
 //class sudoku
@@ -12,7 +13,7 @@ public:
 	int GiveQuestion();
 private:
 	int ori[12][12],mid[12][12];
-	int eyn[12][12][10],byn[16][9][10];
+	int eyn[12][12][10],con[9],rco[9];
 	int rec;
 	int ifb();
 	int rez();
@@ -23,12 +24,11 @@ private:
 int Sudoku::ReadIn(){
 int i,j;
 for(i=0;i<12;i++){for(j=0;j<12;j++){scanf("%d",&ori[i][j]);}}
-//for(i=0;i<12;i++){for(j=0;j<12;j++){printf("%d ",ori[i][j]);}printf("\n");}
 }
 
 //solve
 int Sudoku::Solve(){
-int i,j,k,l,m,cou=1;
+int i,j,k,l,m,n,cou=1;
 rec=0;
 for(i=0;i<12;i++){for(j=0;j<12;j++){mid[i][j]=ori[i][j];if(ori[i][j]!=0&&ori[i][j]!=-1){rec++;}}}
 rez();
@@ -37,9 +37,12 @@ if(ifb()==0){printf("0\n");exit(1);}
 for(i=0;i<12;i++){for(j=0;j<12;j++){if(mid[i][j]!=0&&mid[i][j]!=-1){det(i,j);}}}
 while(cou!=0){
 	cou=0;
-	for(i=0;i<12;i++){for(j=0;j<12;j++){if(mid[i][j]==0&&eyn[i][j][0]==1){for(k=1;k<10;k++){if(eyn[i][j][k]==1){m=k;break;}}mid[i][j]=m;rec++;cou++;det(i,j);}}}}
-
-
+	for(i=0;i<12;i++){for(j=0;j<12;j++){if(mid[i][j]==0&&eyn[i][j][0]==1){for(k=1;k<10;k++){if(eyn[i][j][k]==1){m=k;break;}}mid[i][j]=m;rec++;cou++;det(i,j);}}}
+	for(i=0;i<1;i++){for(j=0;j<1;j++){
+		memset(con,0,sizeof(con));memset(rco,0,sizeof(rco));
+		for(k=i*3;k<i*3+3;k++){for(l=j*3;l<j*3+3;l++){for(n=0;n<9;n++){if(mid[k][l]==0&&eyn[k][l][n+1]==1){con[n]++;rco[n]=k*1000+l;}}}}
+		for(n=0;n<9;n++){if(con[n]==1){mid[rco[n]/1000][rco[n]%1000]=n+1;cou++;rec++;det(rco[n]/1000,rco[n]%1000);}}}}
+}
 
 
 
@@ -61,7 +64,7 @@ return ib;}
 int Sudoku::rez(){
 int i,j,k,l;
 for(i=0;i<12;i++){for(j=0;j<12;j++){for(k=1;k<10;k++){eyn[i][j][k]=1;}eyn[i][j][0]=9;}}
-for(i=0;i<12;i++){for(j=0;j<9;j++){for(k=1;k<10;k++){byn[i][j][k]=1;}byn[i][j][0]=9;}}
+//for(i=0;i<12;i++){for(j=0;j<9;j++){for(k=1;k<10;k++){byn[i][j][k]=1;}byn[i][j][0]=9;}}
 return 0;}
 
 //det
