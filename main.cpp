@@ -13,6 +13,7 @@ public:
 private:
 	int ori[12][12],mid[12][12];
 	int eyn[12][12][10],byn[16][9][10];
+	int rec;
 	int ifb();
 	int rez();
 	int det(int,int);
@@ -27,18 +28,24 @@ for(i=0;i<12;i++){for(j=0;j<12;j++){scanf("%d",&ori[i][j]);}}
 
 //solve
 int Sudoku::Solve(){
-int i,j,k,l,m;
-for(i=0;i<12;i++){for(j=0;j<12;j++){mid[i][j]=ori[i][j];}}
+int i,j,k,l,m,cou=1;
+rec=0;
+for(i=0;i<12;i++){for(j=0;j<12;j++){mid[i][j]=ori[i][j];if(ori[i][j]!=0&&ori[i][j]!=-1){rec++;}}}
 rez();
 if(ifb()==0){printf("0\n");exit(1);}
 
 for(i=0;i<12;i++){for(j=0;j<12;j++){if(mid[i][j]!=0&&mid[i][j]!=-1){det(i,j);}}}
+while(cou!=0){
+	cou=0;
+	for(i=0;i<12;i++){for(j=0;j<12;j++){if(mid[i][j]==0&&eyn[i][j][0]==1){for(k=1;k<10;k++){if(eyn[i][j][k]==1){m=k;break;}}mid[i][j]=m;rec++;cou++;det(i,j);}}}}
 
-for(i=0;i<12;i++){for(j=0;j<12;j++){printf("%d ",mid[i][j]);if(mid[i][j]==-1){printf("\b");}}printf("\n");}printf("\n");
-for(i=0;i<12;i++){for(j=0;j<12;j++){printf("%d ",ori[i][j]);if(mid[i][j]==-1){printf("\b");}}printf("\n");}
-printf("%d\n",eyn[3][6][0]);
-printf("%d\n",eyn[6][3][0]);
 
+
+
+
+printf("%d\n",rec);
+for(i=0;i<12;i++){for(j=0;j<12;j++){printf("%d ",mid[i][j]);if(mid[i][j]==-1){printf("\b\b\b  ");}}printf("\n");}printf("\n");
+for(i=0;i<12;i++){for(j=0;j<12;j++){printf("%d ",ori[i][j]);if(mid[i][j]==-1){printf("\b\b\b  ");}}printf("\n");}
 
 }
 
