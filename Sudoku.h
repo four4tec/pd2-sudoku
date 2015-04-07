@@ -1,3 +1,5 @@
+#ifndef Sdk
+#define Sdk
 #include<cstdio>
 #include<iostream>
 #include<vector>
@@ -20,4 +22,4 @@ private:
         int guesssolve(int gess[12][12]);
         int det(int,int),dgs(int gus[12][12],int ii,int jj);
 };
-
+#endif

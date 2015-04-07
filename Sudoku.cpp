@@ -5,9 +5,7 @@
 #include<cstring>
 #include"Sudoku.h"
 using namespace std;
-
-/*//class sudoku
-class Sudoku{
+/*class Sudoku{
 public:
 	int ReadIn();
 	int Solve();
@@ -19,12 +17,12 @@ private:
 	int ifb();
 	int rez();
 	int guesssolve(int gess[12][12]);
-	int det(int,int),dgs(int gus[12][12],int ii,int jj);
-};*/
+	int det(int,int),dgs(int gus[12][12],int ii,int jj);};*/
+
 int Sudoku::GiveQuestion(){
 int i,j,gq[12][12]={
-{ 1, 2, 3, 4, 5, 6, 7, 8, 9,-1,-1,-1},
-{ 4, 5, 6, 7, 8, 9, 1, 2, 3,-1,-1,-1},
+{ 1, 2, 3, 4, 5, 6, 7, 8, 0,-1,-1,-1},
+{ 4, 5, 6, 7, 8, 9, 1, 2, 0,-1,-1,-1},
 { 0, 0, 0, 0, 0, 0, 0, 0, 0,-1,-1,-1},
 { 0, 0, 0, 0, 0, 0,-1,-1,-1, 0, 0, 0},
 { 0, 0, 0, 0, 0, 0,-1,-1,-1, 0, 0, 0},
@@ -50,22 +48,21 @@ int i,j,k,l,m,n,cou=1;
 
 rec=0;ita=0;
 for(i=0;i<12;i++){for(j=0;j<12;j++){mid[i][j]=ori[i][j];if(ori[i][j]!=0&&ori[i][j]!=-1){rec++;}}}
+if(rec<18){printf("2\n");exit(1);}
 rez();
-
-if(ifb()==0){printf("0\n");exit(1);}
-
 for(i=0;i<12;i++){for(j=0;j<12;j++){if(mid[i][j]!=0&&mid[i][j]!=-1){det(i,j);}}}
+if(ifb()==0){printf("0\n");exit(1);}
 
 while(cou!=0){
 	cou=0;
 	for(i=0;i<12;i++){for(j=0;j<12;j++){if(mid[i][j]==0&&eyn[i][j][0]==1){for(k=1;k<10;k++){if(eyn[i][j][k]==1){m=k;break;}}mid[i][j]=m;rec++;cou++;det(i,j);}
 					else if(mid[i][j]==0&&eyn[i][j][0]==0){printf("0\n");exit(1);}}}
-	for(i=0;i<1;i++){for(j=0;j<1;j++){
+	for(i=0;i<4;i++){for(j=0;j<4;j++){
 		memset(con,0,sizeof(con));memset(rco,0,sizeof(rco));
 		for(k=i*3;k<i*3+3;k++){for(l=j*3;l<j*3+3;l++){for(n=0;n<9;n++){if(mid[k][l]==0&&eyn[k][l][n+1]==1){con[n]++;rco[n]=k*1000+l;}
-										else if(mid[k][l]==n+1){con[n]=-1;}}}}
+										else if(mid[k][l]==n+1){con[n]--;}}}}
 		for(n=0;n<9;n++){if(con[n]==1){mid[rco[n]/1000][rco[n]%1000]=n+1;cou++;rec++;det(rco[n]/1000,rco[n]%1000);}
-				else if(con[n]==0){printf("0\n");exit(1);}}}}}
+				else if(con[n]<-1){printf("0\n");exit(1);}}}}}
 
 //for(i=0;i<12;i++){for(j=0;j<12;j++){printf("%d ",mid[i][j]);}printf("\n");}
 if(rec==108){printf("1\n");for(i=0;i<12;i++){for(j=0;j<12;j++){printf("%d ",mid[i][j]);}printf("\n");}exit(1);}
@@ -90,11 +87,12 @@ for(i=0;i<12;i++){for(j=0;j<12;j++){if(gess[i][j]!=0&&gess[i][j]!=-1){dgs(gess,i
 while(cou!=0){
         cou=0;
         for(i=0;i<12;i++){for(j=0;j<12;j++){if(gess[i][j]==0&&eyn[i][j][0]==1){for(k=1;k<10;k++){if(eyn[i][j][k]==1){m=k;break;}}gess[i][j]=m;rec++;reg++;cou++;dgs(gess,i,j);}}}
-        for(i=0;i<1;i++){for(j=0;j<1;j++){
+        for(i=0;i<4;i++){for(j=0;j<4;j++){
                 memset(con,0,sizeof(con));memset(rco,0,sizeof(rco));
                 for(k=i*3;k<i*3+3;k++){for(l=j*3;l<j*3+3;l++){for(n=0;n<9;n++){if(gess[k][l]==0&&eyn[k][l][n+1]==1){con[n]++;rco[n]=k*1000+l;}
-                                                                                else if(gess[k][l]==n+1){con[n]=-1;}}}}
-                for(n=0;n<9;n++){if(con[n]==1){gess[rco[n]/1000][rco[n]%1000]=n+1;cou++;reg++;rec++;dgs(gess,rco[n]/1000,rco[n]%1000);}}}}}
+                                                                                else if(gess[k][l]==n+1){con[n]--;}}}}
+                for(n=0;n<9;n++){if(con[n]==1){gess[rco[n]/1000][rco[n]%1000]=n+1;cou++;reg++;rec++;dgs(gess,rco[n]/1000,rco[n]%1000);}
+				else if(con[n]<-1){printf("0\n");exit(1);}}}}}
 //printf("%d %d\n",rec,ita);
 if(rec==108){ita++;rec-=reg;if(ita>1){printf("2\n");exit(1);};for(i=0;i<12;i++){for(j=0;j<12;j++){recans[i][j]=gess[i][j];}};return 0;}
 else{
@@ -111,13 +109,16 @@ rez();for(l=0;l<12;l++){for(n=0;n<12;n++){if(gess[l][n]!=0&&gess[l][n]!=-1){dgs(
 //for(i=0;i<12;i++){for(j=0;j<12;j++){printf("%d ",ori[i][j]);}printf("\n");}
 }
 
-
 //ifb
 int Sudoku::ifb(){
-int i,j,k,l,co=0,ib=1;
+int i,j,k,l,co=0,ib=1,che[11];
 for(i=0;i<12;i++){co=0;for(j=0;j<12;j++){if(ori[i][j]==-1){co++;}}if(co!=3){ib=0;}}
 for(i=0;i<12;i++){co=0;for(j=0;j<12;j++){if(ori[j][i]==-1){co++;}}if(co!=3){ib=0;}}
 for(i=0;i<12;i+=3){for(j=0;j<12;j+=3){co=0;for(k=0;k<3;k++){for(l=0;l<3;l++){if(ori[i+k][j+l]==-1){co++;}}}if(co!=0&&co!=9){ib=0;}}}
+for(i=0;i<12;i++){for(j=0;j<12;j++){if(ori[i][j]==0&&eyn[i][j][0]==0){ib=0;break;}}}
+for(i=0;i<12;i+=3){for(j=0;j<12;j+=3){memset(che,0,sizeof(che));
+					for(k=0;k<3;k++){for(l=0;l<3;l++){che[ori[i+k][j+l]+1]++;}}
+					for(k=2;k<11;k++){if(che[k]>1){ib=0;}}}}
 return ib;}
 
 //rez
