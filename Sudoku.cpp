@@ -21,19 +21,20 @@ private:
 
 int Sudoku::GiveQuestion(){
 int i,j,gq[12][12]={
-{ 1, 2, 3, 4, 5, 6, 7, 8, 0,-1,-1,-1},
-{ 4, 5, 6, 7, 8, 9, 1, 2, 0,-1,-1,-1},
+{ 0, 0, 0, 8, 7, 0, 0, 0, 1,-1,-1,-1},
 { 0, 0, 0, 0, 0, 0, 0, 0, 0,-1,-1,-1},
-{ 0, 0, 0, 0, 0, 0,-1,-1,-1, 0, 0, 0},
-{ 0, 0, 0, 0, 0, 0,-1,-1,-1, 0, 0, 0},
-{ 0, 0, 0, 0, 0, 0,-1,-1,-1, 0, 0, 0},
-{ 0, 0, 0,-1,-1,-1, 0, 0, 0, 0, 0, 0},
-{ 0, 0, 0,-1,-1,-1, 0, 0, 0, 0, 0, 0},
-{ 0, 0, 0,-1,-1,-1, 0, 0, 0, 0, 0, 0},
-{-1,-1,-1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-{-1,-1,-1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-{-1,-1,-1, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
-for(i=0;i<12;i++){for(j=0;j<12;j++){printf("%d ",gq[i][j]);}printf("\n");}
+{ 9, 5, 0, 0, 0, 4, 0, 0, 0,-1,-1,-1},
+{-1,-1,-1, 0, 0, 0, 0, 0, 7, 0, 0, 0},
+{-1,-1,-1, 0, 0, 5, 0, 0, 0, 4, 0, 3},
+{-1,-1,-1, 0, 0, 0, 2, 3, 0, 8, 7, 1},
+{ 1, 0, 7, 0, 0, 0,-1,-1,-1, 0, 0, 5},
+{ 0, 0, 0, 0, 6, 9,-1,-1,-1, 0, 0, 0},
+{ 0, 0, 0, 0, 1, 0,-1,-1,-1, 0, 8, 0},
+{ 0, 0, 0,-1,-1,-1, 0, 4, 0, 0, 6, 0},
+{ 0, 4, 8,-1,-1,-1, 0, 0, 9, 3, 1, 0},
+{ 0, 0, 9,-1,-1,-1, 3, 1, 0, 7, 0, 8}};
+for(i=0;i<12;i++){for(j=0;j<12;j++){printf("%d",gq[i][j]);if(j!=11){printf(" ");}}printf("\n");}
+return 0;
 }
 
 //readin
@@ -46,9 +47,8 @@ for(i=0;i<12;i++){for(j=0;j<12;j++){scanf("%d",&ori[i][j]);}}
 int Sudoku::Solve(){
 int i,j,k,l,m,n,cou=1;
 
-rec=0;ita=0;
+rec=0;ita=0;rgt=0;
 for(i=0;i<12;i++){for(j=0;j<12;j++){mid[i][j]=ori[i][j];if(ori[i][j]!=0&&ori[i][j]!=-1){rec++;}}}
-if(rec<18){printf("2\n");exit(1);}
 rez();
 for(i=0;i<12;i++){for(j=0;j<12;j++){if(mid[i][j]!=0&&mid[i][j]!=-1){det(i,j);}}}
 if(ifb()==0){printf("0\n");exit(1);}
@@ -75,12 +75,15 @@ else{
 			guesssolve(ges);
 rez();for(l=0;l<12;l++){for(n=0;n<12;n++){if(mid[l][n]!=0&&mid[l][n]!=-1){det(l,n);}}}
 }}}}}}
-printf("1\n");for(i=0;i<12;i++){for(j=0;j<12;j++){printf("%d ",mid[i][j]);}printf("\n");}
+printf("1\n");
+for(i=0;i<12;i++){for(j=0;j<12;j++){printf("%d",mid[i][j]);if(j!=11){printf(" ");}}printf("\n");}
 //for(i=0;i<12;i++){for(j=0;j<12;j++){printf("%d ",ori[i][j]);}printf("\n");}
 }
 //guesssolve
 int Sudoku::guesssolve(int gess[12][12]){
 int i,j,k,l,m,n,cou=1,reg=1;
+rgt++;
+if(rgt>1000){printf("2\n");exit(1);}
 
 for(i=0;i<12;i++){for(j=0;j<12;j++){if(gess[i][j]!=0&&gess[i][j]!=-1){dgs(gess,i,j);}}}
 
@@ -105,8 +108,7 @@ else{
 			guesssolve(ges);
 rez();for(l=0;l<12;l++){for(n=0;n<12;n++){if(gess[l][n]!=0&&gess[l][n]!=-1){dgs(gess,l,n);}}}
 }}}}}}
-
-//for(i=0;i<12;i++){for(j=0;j<12;j++){printf("%d ",ori[i][j]);}printf("\n");}
+return 0;
 }
 
 //ifb
@@ -125,7 +127,6 @@ return ib;}
 int Sudoku::rez(){
 int i,j,k,l;
 for(i=0;i<12;i++){for(j=0;j<12;j++){for(k=1;k<10;k++){eyn[i][j][k]=1;}eyn[i][j][0]=9;}}
-//for(i=0;i<12;i++){for(j=0;j<9;j++){for(k=1;k<10;k++){byn[i][j][k]=1;}byn[i][j][0]=9;}}
 return 0;}
 
 //dgs
@@ -144,4 +145,5 @@ for(i=0;i<12;i++){if(eyn[ii][i][mid[ii][jj]]==1){eyn[ii][i][mid[ii][jj]]=0;eyn[i
 		  if(eyn[i][jj][mid[ii][jj]]==1){eyn[i][jj][mid[ii][jj]]=0;eyn[i][jj][0]--;}}
 for(i=ii/3*3;i<ii/3*3+3;i++){for(j=jj/3*3;j<jj/3*3+3;j++){if(eyn[i][j][mid[ii][jj]]==1){eyn[i][j][mid[ii][jj]]=0;eyn[i][j][0]--;}}}
 for(i=1;i<10;i++){if(mid[ii][jj]==i){continue;}eyn[ii][jj][i]=0;}eyn[ii][jj][0]=1;
+printf("%d\t%d %d %d\n",rec,jj+1,ii+1,mid[ii][jj]);
 return 0;}
