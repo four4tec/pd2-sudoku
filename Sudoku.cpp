@@ -145,5 +145,4 @@ for(i=0;i<12;i++){if(eyn[ii][i][mid[ii][jj]]==1){eyn[ii][i][mid[ii][jj]]=0;eyn[i
 		  if(eyn[i][jj][mid[ii][jj]]==1){eyn[i][jj][mid[ii][jj]]=0;eyn[i][jj][0]--;}}
 for(i=ii/3*3;i<ii/3*3+3;i++){for(j=jj/3*3;j<jj/3*3+3;j++){if(eyn[i][j][mid[ii][jj]]==1){eyn[i][j][mid[ii][jj]]=0;eyn[i][j][0]--;}}}
 for(i=1;i<10;i++){if(mid[ii][jj]==i){continue;}eyn[ii][jj][i]=0;}eyn[ii][jj][0]=1;
-printf("%d\t%d %d %d\n",rec,jj+1,ii+1,mid[ii][jj]);
 return 0;}
