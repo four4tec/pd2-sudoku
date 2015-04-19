@@ -14,7 +14,9 @@ public:
         int Solve();
         int GiveQuestion();
 private:
+	//紀錄題目
         int ori[12][12],mid[12][12],recans[12][12];
+	//紀錄12*12個空格可填的數字
         int eyn[12][12][10],con[9],rco[9];
         int rec,ita,rgt;
         int ifb();
