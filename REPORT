@@ -1,0 +1,5 @@
+編譯:make
+執行:
+	./solve
+	./givequestion
+輸出入:標準輸出入
