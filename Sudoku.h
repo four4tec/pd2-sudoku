@@ -21,7 +21,7 @@ private:
         int rec,ita,rgt;
         int ifb();
         int rez();
-        int guesssolve(int gess[12][12]);
+        int guesssolve(int guss[12][12]);
         int det(int,int),dgs(int gus[12][12],int ii,int jj);
 };
 #endif

@@ -8,18 +8,18 @@ using namespace std;
 //印出預設的題目
 int Sudoku::GiveQuestion(){
 int i,j,gq[12][12]={
-{ 0, 0, 0, 2, 7, 0, 0, 0, 1,-1,-1,-1},
+{ 0, 0, 0, 8, 7, 0, 0, 0, 1,-1,-1,-1},
 { 0, 0, 0, 0, 0, 0, 0, 0, 0,-1,-1,-1},
-{ 4, 5, 0, 0, 0, 9, 0, 0, 0,-1,-1,-1},
+{ 9, 5, 0, 0, 0, 4, 0, 0, 0,-1,-1,-1},
 {-1,-1,-1, 0, 0, 0, 0, 0, 7, 0, 0, 0},
-{-1,-1,-1, 0, 0, 5, 0, 0, 0, 9, 0, 0},
-{-1,-1,-1, 0, 0, 0, 8, 3, 0, 2, 7, 1},
+{-1,-1,-1, 0, 0, 5, 0, 0, 0, 4, 0, 3},
+{-1,-1,-1, 0, 0, 0, 2, 3, 0, 8, 7, 1},
 { 1, 0, 7, 0, 0, 0,-1,-1,-1, 0, 0, 5},
-{ 0, 0, 0, 0, 6, 4,-1,-1,-1, 0, 0, 0},
-{ 0, 0, 0, 0, 1, 0,-1,-1,-1, 0, 2, 0},
-{ 0, 0, 0,-1,-1,-1, 0, 9, 0, 0, 6, 0},
-{ 0, 9, 2,-1,-1,-1, 0, 0, 4, 3, 0, 0},
-{ 0, 0, 4,-1,-1,-1, 3, 1, 0, 7, 0, 2}};
+{ 0, 0, 0, 0, 6, 9,-1,-1,-1, 0, 0, 0},
+{ 0, 0, 0, 0, 1, 0,-1,-1,-1, 0, 8, 0},
+{ 0, 0, 0,-1,-1,-1, 0, 4, 0, 0, 6, 0},
+{ 0, 4, 8,-1,-1,-1, 0, 0, 9, 3, 1, 0},
+{ 0, 0, 9,-1,-1,-1, 3, 1, 0, 7, 0, 8}};
 for(i=0;i<12;i++){for(j=0;j<12;j++){printf("%d",gq[i][j]);if(j!=11){printf(" ");}}printf("\n");}
 return 0;
 }
@@ -56,47 +56,52 @@ while(cou!=0){
 //判斷是否解完  若無則進猜測
 if(rec==108){printf("1\n");for(i=0;i<12;i++){for(j=0;j<12;j++){printf("%d ",mid[i][j]);}printf("\n");}exit(1);}
 else{
-	int ges[12][12],ii=-1,jj=-1;
-	for(i=0;i<12;i++){for(j=0;j<12;j++){if(mid[i][j]==0){ii=i;jj=j;break;}}if(ii!=-1){break;}}
+	int ii=-1,jj=-1;
+	for(i=0;i<12;i++){for(j=0;j<12;j++){if(mid[i][j]==0){ii=i;jj=j;break;}}if(ii!=-1&&jj!=-1){break;}}
 	for(k=1;k<10;k++){
 		if(eyn[ii][jj][k]==1){
-			for(l=0;l<12;l++){for(n=0;n<12;n++){ges[l][n]=mid[l][n];}}
-			ges[ii][jj]=k;rec++;
-			guesssolve(ges);
-rez();for(l=0;l<12;l++){for(n=0;n<12;n++){if(mid[l][n]!=0&&mid[l][n]!=-1){det(l,n);}}}
+			//for(l=0;l<12;l++){for(n=0;n<12;n++){ges[l][n]=mid[l][n];}}
+			mid[ii][jj]=k;rec++;printf("%d %d %d\n",ii,jj,k);
+			guesssolve();mid[ii][jj]=0;rec--;
+			rez();for(l=0;l<12;l++){for(n=0;n<12;n++){if(mid[l][n]!=0&&mid[l][n]!=-1){det(l,n);}}}
+for(i=0;i<12;i++){for(j=0;j<12;j++){printf("%d",mid[i][j]);if(j!=11){printf(" ");}}printf("\n");}
 }}}
-if(ita==1){printf("1\n");for(i=0;i<12;i++){for(j=0;j<12;j++){printf("%d",recans[i][j]);if(j!=11){printf(" ");}}printf("\n");}}
-else if(ita==0){printf("0\n");}
+printf("1\n");
+for(i=0;i<12;i++){for(j=0;j<12;j++){printf("%d",mid[i][j]);if(j!=11){printf(" ");}}printf("\n");}
 }
 //guesssolve
 //猜測解法  大致跟Solve一樣
-int Sudoku::guesssolve(int gess[12][12]){
+int Sudoku::guesssolve(){
 int i,j,k,l,m,n,cou=1,reg=1;
-rez();for(i=0;i<12;i++){for(j=0;j<12;j++){if(gess[i][j]!=0&&gess[i][j]!=-1){dgs(gess,i,j);}}}
+rgt++;
+//if(rgt>1000){printf("2p\n");exit(1);}
+rez();for(i=0;i<12;i++){for(j=0;j<12;j++){if(mid[i][j]!=0&&mid[i][j]!=-1){dgs(mid,i,j);}}}
 
 while(cou!=0){
         cou=0;
-        for(i=0;i<12;i++){for(j=0;j<12;j++){if(gess[i][j]==0&&eyn[i][j][0]==1){for(k=1;k<10;k++){if(eyn[i][j][k]==1){m=k;break;}}gess[i][j]=m;cou++;dgs(gess,i,j);}}}
+        for(i=0;i<12;i++){for(j=0;j<12;j++){if(mid[i][j]==0&&eyn[i][j][0]==1){for(k=1;k<10;k++){if(eyn[i][j][k]==1){m=k;break;}}mid[i][j]=m;rec++;reg++;cou++;dgs(mid,i,j);}}}
         for(i=0;i<4;i++){for(j=0;j<4;j++){
                 memset(con,0,sizeof(con));memset(rco,0,sizeof(rco));
-                for(k=i*3;k<i*3+3;k++){for(l=j*3;l<j*3+3;l++){for(n=0;n<9;n++){if(gess[k][l]==0&&eyn[k][l][n+1]==1){con[n]++;rco[n]=k*1000+l;}
-                                                                                else if(gess[k][l]==n+1){con[n]--;}}}}
-                for(n=0;n<9;n++){if(con[n]==1){gess[rco[n]/1000][rco[n]%1000]=n+1;cou++;dgs(gess,rco[n]/1000,rco[n]%1000);}
+                for(k=i*3;k<i*3+3;k++){for(l=j*3;l<j*3+3;l++){for(n=0;n<9;n++){if(mid[k][l]==0&&eyn[k][l][n+1]==1){con[n]++;rco[n]=k*1000+l;}
+                                                                                else if(mid[k][l]==n+1){con[n]--;}}}}
+                for(n=0;n<9;n++){if(con[n]==1){mid[rco[n]/1000][rco[n]%1000]=n+1;cou++;reg++;rec++;dgs(mid,rco[n]/1000,rco[n]%1000);}
 				else if(con[n]<-1){return 0;}}}}}
-
-rec=108;for(i=0;i<12;i++){for(j=0;j<12;j++){if(gess[i][j]==0){rec--;}}}
+rec=108;
+for(i=0;i<12;i++){for(j=0;j<12;j++){if(mid[i][j]==0){rec--;}}}
 if(rec==108){
-	ita++;rec-=reg;if(ita>1){printf("2\n");exit(1);};for(i=0;i<12;i++){for(j=0;j<12;j++){recans[i][j]=gess[i][j];}};return 0;}
+for(i=0;i<12;i++){for(j=0;j<12;j++){printf("%d",mid[i][j]);if(j!=11){printf(" ");}}printf("\n");}
+ita++;rec-=reg;if(ita>1){printf("2o\n");exit(1);};for(i=0;i<12;i++){for(j=0;j<12;j++){recans[i][j]=mid[i][j];}};return 0;}
 else{
-	int ges[12][12],ii=-1,jj=-1;
-	for(i=0;i<12;i++){for(j=0;j<12;j++){if(gess[i][j]==0){ii=i;jj=j;break;}}if(ii!=-1){break;}}
+	int ii=-1,jj=-1;
+	//for(l=0;l<12;l++){for(n=0;n<12;n++){ges[l][n]=gess[l][n];}}
+	for(i=0;i<12;i++){for(j=0;j<12;j++){if(mid[i][j]==0){ii=i;jj=j;break;}}if(ii!=-1&&jj!=-1){break;}}
 	for(k=1;k<10;k++){
 		if(eyn[ii][jj][k]==1){
-			for(l=0;l<12;l++){for(n=0;n<12;n++){ges[l][n]=gess[l][n];}}
-			ges[ii][jj]=k;rec++;
-			guesssolve(ges);
-rez();for(l=0;l<12;l++){for(n=0;n<12;n++){if(gess[l][n]!=0&&gess[l][n]!=-1){dgs(gess,l,n);}}}
+			mid[ii][jj]=k;rec++;printf("%d %d %d %d %d\n",rec,ii,jj,k,rgt);
+			guesssolve();mid[ii][jj]=0;rec--;
+			rez();for(l=0;l<12;l++){for(n=0;n<12;n++){if(mid[l][n]!=0&&mid[l][n]!=-1){dgs(mid,l,n);}}}
 }}}
+rgt--;
 return 0;
 }
 
